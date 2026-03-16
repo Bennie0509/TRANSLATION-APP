@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LinguaSwift — Translator</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <!-- Our Stylesheet (must come before the JS file) -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════
+       HEADER  — Logo + Dark Mode Toggle
+  ════════════════════════════════════════ -->
+  <header>
+    <div class="logo">Lingua<span>Swift</span></div>
+
+    <button class="theme-btn" id="themeToggle">
+      <span id="themeIcon">🌙</span>
+      <span id="themeLabel">Dark Mode</span>
+    </button>
+  </header>
+
+
+  <!-- ═══════════════════════════════════════
+       MAIN CARD
+  ════════════════════════════════════════ -->
+  <div class="card">
+
+    <!-- Error Banner (hidden by default, shown on API failure) -->
+    <div class="error-banner" id="errorBanner"></div>
+
+    <!-- ── Language Selector Bar ── -->
+    <div class="lang-bar">
+
+      <!-- Source language dropdown -->
+      <select id="sourceLang">
+        <option value="auto">Detect Language</option>
+        <option value="en" selected>English</option>
+        <option value="fr">French</option>
+        <option value="es">Spanish</option>
+        <option value="de">German</option>
+        <option value="it">Italian</option>
+        <option value="pt">Portuguese</option>
+        <option value="zh">Chinese</option>
+        <option value="ar">Arabic</option>
+        <option value="ja">Japanese</option>
+        <option value="ru">Russian</option>
+      </select>
+
+      <!-- Badge that shows detected language (only visible when "Detect" is on) -->
+      <span class="detect-badge" id="detectBadge"></span>
+
+      <!-- Switch / Swap button -->
+      <button class="switch-btn" id="switchBtn" title="Switch languages">⇄</button>
+
+      <!-- Target language dropdown (pushed to the right) -->
+      <div class="target-wrapper">
+        <select id="targetLang">
+          <option value="fr" selected>French</option>
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="de">German</option>
+          <option value="it">Italian</option>
+          <option value="pt">Portuguese</option>
+          <option value="zh">Chinese</option>
+          <option value="ar">Arabic</option>
+          <option value="ja">Japanese</option>
+          <option value="ru">Russian</option>
+        </select>
+      </div>
+    </div><!-- /lang-bar -->
+
+
+    <!-- ── Input / Output Panels ── -->
+    <div class="panels">
+
+      <!-- INPUT PANEL -->
+      <div class="panel">
+        <div class="panel-label">Input</div>
+
+        <textarea
+          id="inputText"
+          maxlength="500"
+          placeholder="Enter text to translate…"
+        >Hello, how are you</textarea>
+
+        <div class="panel-footer">
+          <!-- Listen button -->
+          <button class="icon-btn" id="listenInputBtn" title="Listen to input">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+            Listen
+          </button>
+
+          <!-- Copy button -->
+          <button class="icon-btn" id="copyInputBtn" title="Copy input text">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            Copy
+          </button>
+
+          <!-- Live character counter -->
+          <span class="char-count" id="charCount">18/500</span>
+        </div>
+      </div><!-- /INPUT PANEL -->
+
+
+      <!-- OUTPUT PANEL -->
+      <div class="panel">
+        <div class="panel-label">Output</div>
+
+        <textarea
+          id="outputText"
+          readonly
+          placeholder="Translation will appear here…"
+        ></textarea>
+
+        <div class="panel-footer">
+          <!-- Listen button -->
+          <button class="icon-btn" id="listenOutputBtn" title="Listen to translation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+            Listen
+          </button>
+
+          <!-- Copy button -->
+          <button class="icon-btn" id="copyOutputBtn" title="Copy translation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            Copy
+          </button>
+        </div>
+      </div><!-- /OUTPUT PANEL -->
+
+    </div><!-- /panels -->
+
+
+    <!-- ── Translate Button ── -->
+    <div class="translate-row">
+      <button class="translate-btn" id="translateBtn">
+        <!-- Spinner shown during API call -->
+        <div class="spinner"></div>
+        <!-- Normal button label -->
+        <span class="btn-text">Translate</span>
+      </button>
+    </div>
+
+  </div><!-- /card -->
+
+
+  <!-- Toast notification (pops up for copy/listen feedback) -->
+  <div class="toast" id="toast"></div>
+
+
+  <!-- Our JavaScript (loaded AFTER the HTML so all elements exist) -->
+  <script src="app.js"></script>
+
+</body>
+</html>
